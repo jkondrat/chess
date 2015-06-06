@@ -17,6 +17,9 @@
     "tests"
   ],
   "dependencies": {
-    "jquery": "~2.1.4"
+    "jquery": "~2.1.4",
+    "chess.js": "~0.9.1",
+    "angular": "~1.4.0",
+    "bootstrap": "~3.3.4"
   }
 }
