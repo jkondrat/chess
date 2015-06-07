@@ -4,6 +4,7 @@
 <head>
   <title>Chess</title>
   <meta charset="UTF-8">
+  <link href='/css/bootstrap.min.css' rel="stylesheet" type="text/css"/>
   <link href='/css/style.css' rel="stylesheet" type="text/css"/>
 </head>
 
@@ -13,14 +14,32 @@
   <script src="/js/jquery-ui.min.js"></script>
   <script src="/js/angular.min.js"></script>
   <script src="/js/chess.min.js"></script>
+  <script src="/js/bootstrap.min.js"></script>
   <script src="/js/app.js"></script>
 
+  <div class="alert alert-info" role="alert">{{alert}}</div>
+
   <div id="chessboard">
-  	<div class="row" ng-repeat="c in rows">
-  		<div class="tile" ng-repeat="n in ranks" data-sq="{{c}}{{n}}">
+  	<div class="col" ng-repeat="c in cols">
+  		<div class="tile" ng-repeat="r in ranks" data-sq="{{c}}{{r}}">
   		</div>
   	</div>
   </div>
+
+  <div id="rooms">
+    <div>
+      Nickname: <input id="name">
+    </div>
+    <div ng-repeat="room in rooms">
+      {{room}}
+      <input class="join" data-room="{{room}}" type="button" value="Join">
+    </div>
+    <div>
+      Room name: <input id="room">
+      <input class="join" type="button" value="Join">
+    </div>
+  </div>
+
 </body>
 
 </html>
