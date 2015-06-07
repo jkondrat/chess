@@ -1,0 +1,71 @@
+body {
+	background-color: #b0c4de;
+}
+
+#chessboard {
+	.row {
+		float: left;
+
+		.tile {
+			background-color: white;
+			width: 64px;
+			height: 64px;
+		}
+
+		&:nth-child(even) .tile:nth-child(odd), 
+		&:nth-child(odd) .tile:nth-child(even) {
+			background-color: gray;
+		}
+	}
+
+	.piece {
+		display: block;
+		width: 64px;
+		height: 64px;
+		font-size: 56px;
+		text-align:center;
+		vertical-align:middle;
+
+		&.white {
+			&.pawn:before {
+				content: "♙";
+			}
+			&.rook:before {
+				content: "♖";
+			}
+			&.night:before {
+				content: "♘";
+			}
+			&.bishop:before {
+				content: "♗";
+			}
+			&.king:before {
+				content: "♕";
+			}
+			&.queen:before {
+				content: "♔";
+			}
+		}
+
+		&.black {
+			&.pawn:before {
+				content: "♟";
+			}
+			&.rook:before {
+				content: "♜";
+			}
+			&.night:before {
+				content: "♞";
+			}
+			&.bishop:before {
+				content: "♝";
+			}
+			&.king:before {
+				content: "♛";
+			}
+			&.queen:before {
+				content: "♚";
+			}
+		}
+	}
+}

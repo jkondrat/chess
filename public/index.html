@@ -1,16 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="chess">
 
 <head>
   <title>Chess</title>
   <meta charset="UTF-8">
-  <link rel="stylesheet" href="/css/style.css">
+  <link href='/css/style.css' rel="stylesheet" type="text/css"/>
 </head>
 
-<body>
+<body ng-controller="ChessController">
   <script src="/socket.io/socket.io.js"></script>
   <script src="/js/jquery.min.js"></script>
+  <script src="/js/angular.min.js"></script>
   <script src="/js/app.js"></script>
+
+  <div id="chessboard">
+  	<div class="row" ng-repeat="c in chars">
+  		<div class="tile" ng-repeat="n in ranks">
+  		  <span class="piece pawn black"/>
+  		</div>
+  	</div>
+  </div>
 </body>
 
 </html>
