@@ -10,13 +10,14 @@
 <body ng-controller="ChessController">
   <script src="/socket.io/socket.io.js"></script>
   <script src="/js/jquery.min.js"></script>
+  <script src="/js/jquery-ui.min.js"></script>
   <script src="/js/angular.min.js"></script>
+  <script src="/js/chess.min.js"></script>
   <script src="/js/app.js"></script>
 
   <div id="chessboard">
-  	<div class="row" ng-repeat="c in chars">
-  		<div class="tile" ng-repeat="n in ranks">
-  		  <span class="piece pawn black"/>
+  	<div class="row" ng-repeat="c in rows">
+  		<div class="tile" ng-repeat="n in ranks" data-sq="{{c}}{{n}}">
   		</div>
   	</div>
   </div>

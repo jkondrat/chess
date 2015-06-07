@@ -18,52 +18,54 @@ body {
 		}
 	}
 
+
 	.piece {
 		display: block;
 		width: 64px;
 		height: 64px;
 		font-size: 56px;
-		text-align:center;
-		vertical-align:middle;
+		text-align: center;
+		vertical-align: middle;
+		cursor: pointer;
 
 		&.white {
-			&.pawn:before {
+			&.p:before {
 				content: "♙";
 			}
-			&.rook:before {
+			&.r:before {
 				content: "♖";
 			}
-			&.night:before {
+			&.n:before {
 				content: "♘";
 			}
-			&.bishop:before {
+			&.b:before {
 				content: "♗";
 			}
-			&.king:before {
+			&.k:before {
 				content: "♕";
 			}
-			&.queen:before {
+			&.q:before {
 				content: "♔";
 			}
 		}
 
 		&.black {
-			&.pawn:before {
+			&.p:before {
 				content: "♟";
 			}
-			&.rook:before {
+			&.r:before {
 				content: "♜";
 			}
-			&.night:before {
+			&.n:before {
 				content: "♞";
 			}
-			&.bishop:before {
+			&.b:before {
 				content: "♝";
 			}
-			&.king:before {
+			&.k:before {
 				content: "♛";
 			}
-			&.queen:before {
+			&.q:before {
 				content: "♚";
 			}
 		}
