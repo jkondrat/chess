@@ -40,17 +40,17 @@
             </div><!-- /form-group -->
             <hr>
             <h4>Rooms</h4>
+            <div class="input-group m-b">
+              <input type="text" class="form-control" placeholder="A new room name" ng-model="room">
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="button" ng-click="joinRoom()">Create</button>
+              </span>
+            </div><!-- /input-group -->
             <div class="list-group">
               <a href="#" ng-repeat="room in rooms" class="list-group-item" ng-class="{disabled: room.status=='busy'}" ng-click="joinRoom(room)">
                   {{room.name}}
               </a>
             </div><!-- /list-group -->
-            <div class="input-group">
-              <input type="text" class="form-control" placeholder="A new room name" ng-model="room">
-              <span class="input-group-btn">
-                <button class="btn btn-default" type="button" ng-click="joinRoom()">Join!</button>
-              </span>
-            </div><!-- /input-group -->
           </div><!-- /.panel-body -->
         </div><!-- /panel -->
       </div><!-- /rooms -->
