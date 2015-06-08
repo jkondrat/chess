@@ -3,7 +3,6 @@ var app = angular.module('chess', []);
 app.controller('ChessController', ['$scope', function($scope) {
 	$scope.cols = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 	$scope.ranks = [8, 7, 6, 5, 4, 3, 2, 1];
-	$scope.messages = [];
 
 	var chessboard = $("#chessboard");
 	var rooms = $("#rooms");
@@ -36,11 +35,13 @@ app.controller('ChessController', ['$scope', function($scope) {
 		piece.show();
 		toTile.append(piece);
 		chess.move({ from: sqFrom, to: sqTo });
+		$scope.$apply();
 	}
 
 	function initBoard() {
 		$.each($(".tile"), function(i, tile) {
 			var tileEl = $(tile);
+			tileEl.empty();
 			var sq = tileEl.data("sq");
 			var piece = chess.get(sq);
 			if (piece != null) {
@@ -52,7 +53,6 @@ app.controller('ChessController', ['$scope', function($scope) {
 					pieceEl.addClass('white');
 				}
 				pieceEl.addClass(piece.type);
-				tileEl.empty();
 				tileEl.append(pieceEl);
 			}
 		});
@@ -84,6 +84,20 @@ app.controller('ChessController', ['$scope', function($scope) {
 		});
 	}
 
+	function addMessage(msg) {
+		$scope.messages.push(msg);
+		if ($scope.messages.length > 10) {
+			$scope.messages.splice(10, 1);
+		}
+	}
+
+	function onGameEnded() {
+		addMessage({
+			"type": "back",
+			"text": "Room list"
+		});
+	}
+
 	window.addEventListener("load", function (event) {
 		if (!socket || !socket.connected) {
 			socket = io({forceNew: true});
@@ -96,24 +110,26 @@ app.controller('ChessController', ['$scope', function($scope) {
 			$scope.$apply();
 		});
 		socket.on('start', function (col) {
+			$scope.messages = [];
 			$scope.alert = '';
-			rooms.hide();
 			chess = new Chess();
 			player = col;
 			initBoard();
 			rooms.hide();
 			chessboard.show();
 			chat.show();
+			var color = (col == 'w' ? 'white' : 'black');
+			$scope.messages.push({
+				"type": "status",
+				"text": "Game has started. You are playing as " + color + "."
+			});
 			$scope.$apply();
 		});
 		socket.on("turn", function(sqFrom, sqTo) {
 			doMove(sqFrom, sqTo);
 		});
 		socket.on("msg", function(msg) {
-			$scope.messages.push(msg);
-			if ($scope.messages.length > 10) {
-				$scope.messages.splice(0, 1);
-			}
+			addMessage(msg);
 			$scope.$apply();
 		});
 		socket.on('status', function (status) {
@@ -122,6 +138,9 @@ app.controller('ChessController', ['$scope', function($scope) {
 			} else if (status === 'waiting') {
 				$scope.alert = 'Waiting for players';
 				rooms.hide();
+			} else if (status === 'disconnected') {
+				$scope.alert = 'Player disconnected';
+				onGameEnded();
 			}
 			$scope.$apply();
 		});
@@ -150,4 +169,19 @@ app.controller('ChessController', ['$scope', function($scope) {
 			$scope.message = '';
 		}
 	};
+
+	$scope.chessboardClass = function() {
+		if (chess && chess.turn() == 'w') {
+			return 'shadow-white';
+		}
+		return 'shadow-black'
+	}
+
+	$scope.goBack = function() {
+		$scope.rooms = [];
+		$scope.messages = [];
+		socket.emit('listRooms');
+		chat.hide();
+		rooms.show();
+	}
 }]);
