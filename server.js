@@ -66,6 +66,9 @@ io.sockets.on("connection", function (socket) {
 	console.log("new connection");
 
 	socket.on("join", function (userName, roomName) {
+		if (!userName || !roomName) {
+			return;
+		}
 		var user = {};
 		user.socket = socket;
 		user.name = userName;
@@ -96,27 +99,43 @@ io.sockets.on("connection", function (socket) {
 
 	socket.on("turn", function(sqFrom, sqTo) {
 		var room = findRoomBySocket(socket);
-		var move = room.game.move({ from: sqFrom, to: sqTo });
-		if (move != null) {
-			io.to(room.name).emit("turn", sqFrom, sqTo);
+		if (!!room) {
+			var move = room.game.move({ from: sqFrom, to: sqTo });
+			if (move != null) {
+				io.to(room.name).emit("turn", sqFrom, sqTo);
+			}
 		}
 	});
 
 	socket.on("listRooms", function() {
 		var roomList = [];
 		for (var i = 0; i < rooms.length; i++) {
-            var room = {};
-            room.name = rooms[i].name;
-            if (!rooms[i].white) {
-                room.status = "available";
-            } else {
-                room.status = "busy";
-            }
-            roomList.push(room);
+			var room = {};
+			room.name = rooms[i].name;
+			if (!rooms[i].white) {
+				room.status = "available";
+			} else {
+				room.status = "busy";
+			}
+			roomList.push(room);
 		}
 		socket.emit("rooms", roomList);
 	});
-	
+
+	socket.on("msg", function(text) {
+		var room = findRoomBySocket(socket);
+		if (!!room) {
+			var msg = {};
+			msg.text = text;
+			if (!!room.white && room.white.socket == socket) {
+				msg.name = room.white.name;
+			} else {
+				msg.name = room.black.name;
+			}
+			io.to(room.name).emit("msg", msg);
+		}
+	});
+
 	socket.on("error", function (err) {
 		console.dir(err);
 	});

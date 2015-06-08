@@ -5,14 +5,14 @@ body {
 }
 
 .col-md {
-    width: @tile-size * 8;
-    height: @tile-size * 8;
-    float: left;
+	width: @tile-size * 8;
+	height: @tile-size * 8;
+	float: left;
 }
 
 #chessboard {
-    box-shadow: 0 0 5px black;
-    margin: 0 2% 2% 0;
+	box-shadow: 0 0 5px black;
+	margin: 0 2% 2% 0;
 
 	.col {
 		float: left;
@@ -79,6 +79,20 @@ body {
 			&.q:before {
 				content: "♚";
 			}
+		}
+	}
+}
+
+#chat {
+	display: none;
+	&, .panel, .panel-body {
+		height: 100%;
+	}
+
+	#messages {
+		height: 80%;
+		.list-group-item {
+			padding: 9px 15px;
 		}
 	}
 }

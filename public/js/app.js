@@ -3,12 +3,11 @@ var app = angular.module('chess', []);
 app.controller('ChessController', ['$scope', function($scope) {
 	$scope.cols = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 	$scope.ranks = [8, 7, 6, 5, 4, 3, 2, 1];
-	$scope.alert = '';
-	$scope.user = '';
-	$scope.room = '';
+	$scope.messages = [];
 
 	var chessboard = $("#chessboard");
 	var rooms = $("#rooms");
+	var chat = $("#chat");
 	var join = $(".join");
 
 	var chess;
@@ -81,7 +80,7 @@ app.controller('ChessController', ['$scope', function($scope) {
 				var sqTo = droppable.data("sq");
 				findTile(sqFrom).children().hide();
 				socket.emit('turn', sqFrom, sqTo);
-  			}
+			}
 		});
 	}
 
@@ -102,11 +101,20 @@ app.controller('ChessController', ['$scope', function($scope) {
 			chess = new Chess();
 			player = col;
 			initBoard();
+			rooms.hide();
 			chessboard.show();
+			chat.show();
 			$scope.$apply();
 		});
 		socket.on("turn", function(sqFrom, sqTo) {
 			doMove(sqFrom, sqTo);
+		});
+		socket.on("msg", function(msg) {
+			$scope.messages.push(msg);
+			if ($scope.messages.length > 10) {
+				$scope.messages.splice(0, 1);
+			}
+			$scope.$apply();
 		});
 		socket.on('status', function (status) {
 			if (status === 'busy') {
@@ -117,7 +125,6 @@ app.controller('ChessController', ['$scope', function($scope) {
 			}
 			$scope.$apply();
 		});
-		//chessboard.hide();
 	});
 
 	$scope.joinRoom = function(room) {
@@ -134,6 +141,13 @@ app.controller('ChessController', ['$scope', function($scope) {
 			$scope.alert = 'Nickname not specified';
 		} else {
 			socket.emit('join', $scope.user, roomName);
+		}
+	};
+
+	$scope.sendMessage = function() {
+		if (!!$scope.message) {
+			socket.emit('msg', $scope.message);
+			$scope.message = '';
 		}
 	};
 }]);
