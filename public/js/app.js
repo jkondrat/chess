@@ -112,7 +112,7 @@ app.controller('ChessController', ['$scope', function($scope) {
 			if (status === 'busy') {
 				$scope.alert = 'This game has already started';
 			} else if (status === 'waiting') {
-				$scope.alert = 'Waiting for player';
+				$scope.alert = 'Waiting for players';
 				rooms.hide();
 			}
 			$scope.$apply();
@@ -121,15 +121,19 @@ app.controller('ChessController', ['$scope', function($scope) {
 	});
 
 	$scope.joinRoom = function(room) {
-		if (!room) {
-			room = $scope.room;
+		var roomName = $scope.room;
+		if (!!room) {
+			if (room.status == 'busy') {
+				return;
+			}
+			roomName = room.name;
 		}
-		if (!room) {
+		if (!roomName) {
 			$scope.alert = 'Room name not specified';
 		} else if (!$scope.user) {
 			$scope.alert = 'Nickname not specified';
 		} else {
-			socket.emit('join', $scope.user, room);
+			socket.emit('join', $scope.user, roomName);
 		}
 	};
 }]);

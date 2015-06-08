@@ -41,8 +41,8 @@
             <hr>
             <h4>Rooms</h4>
             <div class="list-group">
-              <a href="#" ng-repeat="room in rooms" class="list-group-item" ng-click="joinRoom(room)">
-                  {{room}}
+              <a href="#" ng-repeat="room in rooms" class="list-group-item" ng-class="{disabled: room.status=='busy'}" ng-click="joinRoom(room)">
+                  {{room.name}}
               </a>
             </div><!-- /list-group -->
             <div class="input-group">

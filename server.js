@@ -103,11 +103,18 @@ io.sockets.on("connection", function (socket) {
 	});
 
 	socket.on("listRooms", function() {
-		var roomNames = [];
+		var roomList = [];
 		for (var i = 0; i < rooms.length; i++) {
-			roomNames.push(rooms[i].name);
+            var room = {};
+            room.name = rooms[i].name;
+            if (!rooms[i].white) {
+                room.status = "available";
+            } else {
+                room.status = "busy";
+            }
+            roomList.push(room);
 		}
-		socket.emit("rooms", roomNames);
+		socket.emit("rooms", roomList);
 	});
 	
 	socket.on("error", function (err) {
