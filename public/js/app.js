@@ -3,6 +3,9 @@ var app = angular.module('chess', []);
 app.controller('ChessController', ['$scope', function($scope) {
 	$scope.cols = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 	$scope.ranks = [8, 7, 6, 5, 4, 3, 2, 1];
+	$scope.alert = '';
+	$scope.user = '';
+	$scope.room = '';
 
 	var chessboard = $("#chessboard");
 	var rooms = $("#rooms");
@@ -91,6 +94,7 @@ app.controller('ChessController', ['$scope', function($scope) {
 		});
 		socket.on('rooms', function (rooms) {
 			$scope.rooms = rooms;
+			$scope.$apply();
 		});
 		socket.on('start', function (col) {
 			$scope.alert = '';
@@ -106,25 +110,26 @@ app.controller('ChessController', ['$scope', function($scope) {
 		});
 		socket.on('status', function (status) {
 			if (status === 'busy') {
-				$scope.alert = 'Selected room is busy';
+				$scope.alert = 'This game has already started';
 			} else if (status === 'waiting') {
 				$scope.alert = 'Waiting for player';
 				rooms.hide();
 			}
 			$scope.$apply();
 		});
-		chessboard.hide();
+		//chessboard.hide();
 	});
 
-	join.on("click", function (event) {
-		var room = $(this).data("room");
+	$scope.joinRoom = function(room) {
 		if (!room) {
-			room = $("#room").val();
+			room = $scope.room;
 		}
-		var name = $("#name").val();
-		if (!room || !name) {
-			return;
+		if (!room) {
+			$scope.alert = 'Room name not specified';
+		} else if (!$scope.user) {
+			$scope.alert = 'Nickname not specified';
+		} else {
+			socket.emit('join', $scope.user, room);
 		}
-		socket.emit('join', name, room);
-	});
+	};
 }]);

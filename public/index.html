@@ -17,28 +17,45 @@
   <script src="/js/bootstrap.min.js"></script>
   <script src="/js/app.js"></script>
 
-  <div class="alert alert-info" role="alert">{{alert}}</div>
-
-  <div id="chessboard">
-  	<div class="col" ng-repeat="c in cols">
-  		<div class="tile" ng-repeat="r in ranks" data-sq="{{c}}{{r}}">
-  		</div>
-  	</div>
+  <div class="page-header">
+    <h1>Chessboard <small>online</small></h1>
   </div>
 
-  <div id="rooms">
-    <div>
-      Nickname: <input id="name">
-    </div>
-    <div ng-repeat="room in rooms">
-      {{room}}
-      <input class="join" data-room="{{room}}" type="button" value="Join">
-    </div>
-    <div>
-      Room name: <input id="room">
-      <input class="join" type="button" value="Join">
-    </div>
-  </div>
+  <div class="alert alert-info" role="alert" ng-if="alert">{{alert}}</div>
+
+  <div class="col-md-6">
+    <div id="chessboard">
+    	<div class="col" ng-repeat="c in cols">
+    		<div class="tile" ng-repeat="r in ranks" data-sq="{{c}}{{r}}">
+    		</div>
+    	</div>
+    </div><!-- /chessboard -->
+  </div><!-- /.col-md-6 -->
+  <div class="col-md-6">
+    <div id="rooms">
+      <div class="panel panel-default">
+        <div class="panel-heading">Find a game</div>
+        <div class="panel-body">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Nickname" ng-model="user">
+          </div><!-- /input-group -->
+          <hr>
+          <h4>Rooms</h4>
+          <div class="list-group">
+            <a href="#" ng-repeat="room in rooms" class="list-group-item" ng-click="joinRoom(room)">
+                {{room}}
+            </a>
+          </div><!-- /list-group -->
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="A new room name" ng-model="room">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button" ng-click="joinRoom()">Join!</button>
+            </span>
+          </div><!-- /input-group -->
+        </div><!-- /.panel-body -->
+      </div><!-- /panel -->
+    </div><!-- /rooms -->
+  </div><!-- /.col-md-6 -->
 
 </body>
 
