@@ -35,7 +35,13 @@ app.controller('ChessController', ['$scope', function($scope) {
 		piece.show();
 		toTile.append(piece);
 		chess.move({ from: sqFrom, to: sqTo });
-		$scope.$apply();
+		if (chess.game_over()) { 
+			addMessage({
+				"type": "status",
+				"text": "Game over."
+			});
+			onGameEnded();
+		}
 	}
 
 	function initBoard() {
@@ -94,7 +100,7 @@ app.controller('ChessController', ['$scope', function($scope) {
 	function onGameEnded() {
 		addMessage({
 			"type": "back",
-			"text": "Room list"
+			"text": "Go back to room list"
 		});
 	}
 
@@ -127,6 +133,7 @@ app.controller('ChessController', ['$scope', function($scope) {
 		});
 		socket.on("turn", function(sqFrom, sqTo) {
 			doMove(sqFrom, sqTo);
+			$scope.$apply();
 		});
 		socket.on("msg", function(msg) {
 			addMessage(msg);

@@ -103,6 +103,10 @@ io.sockets.on("connection", function (socket) {
 			var move = room.game.move({ from: sqFrom, to: sqTo });
 			if (move != null) {
 				io.to(room.name).emit("turn", sqFrom, sqTo);
+				if (room.game.game_over()) {
+					var idx = rooms.indexOf(room);
+					rooms.splice(idx, 1);
+				}
 			}
 		}
 	});
