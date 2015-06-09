@@ -53,7 +53,7 @@ app.controller('ChessController', ['$scope', function($scope) {
 			if (piece != null) {
 				var pieceEl = $('<span />');
 				pieceEl.addClass('piece');
-				if (piece.color == 'b') {
+				if (piece.color === 'b') {
 					pieceEl.addClass('black');
 				} else {
 					pieceEl.addClass('white');
@@ -130,7 +130,7 @@ app.controller('ChessController', ['$scope', function($scope) {
 			rooms.hide();
 			chessboard.show();
 			chat.show();
-			var color = (col == 'w' ? 'white' : 'black');
+			var color = (col === 'w' ? 'white' : 'black');
 			$scope.messages.push({
 				"type": "status",
 				"text": "Game has started. You are playing as " + color + "."
@@ -148,6 +148,8 @@ app.controller('ChessController', ['$scope', function($scope) {
 		socket.on('status', function (status) {
 			if (status === 'busy') {
 				$scope.alert = 'This game has already started';
+			} else if (status === 'duplicate username') {
+				$scope.alert = 'There is already a player with that name in this room';
 			} else if (status === 'waiting') {
 				$scope.alert = 'Waiting for players';
 				rooms.hide();
@@ -162,7 +164,7 @@ app.controller('ChessController', ['$scope', function($scope) {
 	$scope.joinRoom = function(room) {
 		var roomName = $scope.room;
 		if (!!room) {
-			if (room.status == 'busy') {
+			if (room.status === 'busy') {
 				return;
 			}
 			roomName = room.name;
@@ -184,14 +186,14 @@ app.controller('ChessController', ['$scope', function($scope) {
 	};
 
 	$scope.chessboardClass = function() {
-		if (chess && chess.turn() == 'w') {
+		if (chess && chess.turn() === 'w') {
 			return 'shadow-white';
 		}
 		return 'shadow-black'
 	}
 
 	$scope.tileClass = function(sq) {
-		if ($.inArray(sq, $scope.validMoves) != -1) {
+		if ($.inArray(sq, $scope.validMoves) !== -1) {
 			return 'valid-move';
 		}
 		return '';

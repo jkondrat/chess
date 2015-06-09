@@ -74,10 +74,14 @@ io.sockets.on("connection", function (socket) {
 		user.socket = socket;
 		user.name = userName;
 		var existingRoom = findRoom(roomName);
-		if (existingRoom != null && (existingRoom.white != null
-			|| existingRoom.black.name == userName)) {
-			socket.emit("status", "busy");
-			return;
+		if (existingRoom != null) {
+			if (existingRoom.black.name == userName) {
+				socket.emit("status", "duplicate username");
+				return;
+			} else if (existingRoom.white != null) {
+				socket.emit("status", "busy");
+				return;
+			}
 		}
 		socket.join(roomName);
 		console.log(userName + " has joined the room " + roomName);
