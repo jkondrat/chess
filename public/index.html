@@ -26,7 +26,7 @@
 
     <div id="chessboard" class="col-md" ng-class="chessboardClass()">
       <div class="col" ng-repeat="c in cols">
-        <div class="tile" ng-repeat="r in ranks" data-sq="{{c}}{{r}}">
+        <div class="tile" ng-repeat="r in ranks" data-sq="{{c}}{{r}}" ng-class="tileClass('{{c}}{{r}}')">
         </div>
       </div>
     </div><!-- /chessboard -->

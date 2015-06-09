@@ -11,14 +11,14 @@ app.controller('ChessController', ['$scope', function($scope) {
 
 	var chess;
 	var socket;
-	var validMoves = [];
+	$scope.validMoves = [];
 	var player;
 
 	function validateMove(fromTile, toTile) {
 		if (chess.turn() === player 
 			&& fromTile.get(0) !== toTile.get(0)) {
 			var sqTo = toTile.data("sq");
-			return ($.inArray(sqTo, validMoves) != -1);
+			return ($.inArray(sqTo, $scope.validMoves) != -1);
 		}
 		return false;
 	}
@@ -67,12 +67,17 @@ app.controller('ChessController', ['$scope', function($scope) {
 			revert: 'invalid',
 			start: function( event, ui ) {
 				if (chess.turn() !== player) return;
-				validMoves = [];
+				$scope.validMoves = [];
 				var sq = $(this).parent().data("sq");
 				var moves = chess.moves({square: sq, verbose: true});
 				$.each(moves, function(i, m) {
-					validMoves.push(m.to);
+					$scope.validMoves.push(m.to);
 				});
+				$scope.$apply();
+			},
+			stop: function( event, ui ) {
+				$scope.validMoves = [];
+				$scope.$apply();
 			}
 		});
 		$( ".tile" ).droppable({
@@ -80,6 +85,7 @@ app.controller('ChessController', ['$scope', function($scope) {
 				return validateMove(el.parent(), $(this));
 			},
 			drop: function(event, ui) {
+				$scope.validMoves = [];
 				var draggable = ui.draggable;
 				var droppable = $(this);
 				var sqFrom = draggable.parent().data("sq");
@@ -183,6 +189,14 @@ app.controller('ChessController', ['$scope', function($scope) {
 		}
 		return 'shadow-black'
 	}
+
+	$scope.tileClass = function(sq) {
+		if ($.inArray(sq, $scope.validMoves) != -1) {
+			return 'valid-move';
+		}
+		return '';
+	}
+
 
 	$scope.goBack = function() {
 		$scope.rooms = [];

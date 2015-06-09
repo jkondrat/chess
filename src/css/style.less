@@ -18,19 +18,28 @@ body {
 
 		.tile {
 			background-color: white;
+			transition: background-color 0.5s ease;
 			width: @tile-size;
 			height: @tile-size;
+
+			&.valid-move {
+				background-color: #f1fee3;
+			}
 		}
 
 		&:nth-child(even) .tile:nth-child(odd), 
 		&:nth-child(odd) .tile:nth-child(even) {
 			background-color: gray;
+
+			&.valid-move {
+				background-color: #b4beaa;
+			}
 		}
 	}
 
 
 	.piece {
-		display: block;
+		display: block !important;
 		width: @tile-size;
 		height: @tile-size;
 		font-size: 56px;

@@ -51,6 +51,7 @@ function findRoomBySocket(socket) {
 function cleanUp(socket) {
 	var room = findRoomBySocket(socket);
 	if (room) {
+		console.log(room.name + " closed");
 		io.to(room.name).emit("status", "disconnected");
 		if (room.white) {
 			room.white.socket.leave(room.name);
@@ -64,7 +65,6 @@ function cleanUp(socket) {
 }
 
 io.sockets.on("connection", function (socket) {
-	console.log("new connection");
 
 	socket.on("join", function (userName, roomName) {
 		if (!userName || !roomName) {
@@ -80,6 +80,7 @@ io.sockets.on("connection", function (socket) {
 			return;
 		}
 		socket.join(roomName);
+		console.log(userName + " has joined the room " + roomName);
 		if (existingRoom != null) {
 			existingRoom.white = user;
 			existingRoom.game = new Chess();
