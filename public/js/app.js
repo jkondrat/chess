@@ -191,4 +191,8 @@ app.controller('ChessController', ['$scope', function($scope) {
 		chat.hide();
 		rooms.show();
 	}
+
+	$scope.fetchRooms = function() {
+		socket.emit('listRooms');
+	}
 }]);

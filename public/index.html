@@ -39,7 +39,9 @@
               <input type="text" class="form-control" placeholder="Nickname" ng-model="user">
             </div><!-- /form-group -->
             <hr>
-            <h4>Rooms</h4>
+            <h4>Rooms
+              <span class="glyphicon glyphicon-refresh pull-right" ng-click="fetchRooms()"></span>
+            </h4>
             <div class="input-group m-b">
               <input type="text" class="form-control" placeholder="A new room name" ng-model="room">
               <span class="input-group-btn">

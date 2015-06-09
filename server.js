@@ -17,6 +17,7 @@ app.use('/js/angular.min.map', static(__dirname + '/bower_components/angularjs/a
 app.use('/js/chess.min.js', static(__dirname + '/bower_components/chess.js/chess.min.js'));
 app.use('/js/bootstrap.min.js', static(__dirname + '/bower_components/bootstrap/dist/js/bootstrap.min.js'));
 app.use('/css/bootstrap.min.css', static(__dirname + '/bower_components/bootstrap/dist/css/bootstrap.min.css'));
+app.use('/fonts', static(__dirname + '/bower_components/bootstrap/dist/fonts'));
 app.use(lessMiddleware(path.join(__dirname, 'src'), {
 	dest: path.join(__dirname, 'public')
 }));
