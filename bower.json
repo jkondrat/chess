@@ -19,7 +19,7 @@
   "dependencies": {
     "jquery": "~2.1.4",
     "chess.js": "~0.9.1",
-    "angular": "~1.4.0",
+    "angularjs": "~1.4.0",
     "bootstrap": "~3.3.4",
     "jquery-ui": "~1.11.4"
   }
