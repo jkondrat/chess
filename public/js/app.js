@@ -124,6 +124,9 @@ app.controller('ChessController', ['$scope', function($scope) {
 		socket.on('start', function (col) {
 			$scope.messages = [];
 			$scope.alert = '';
+			if (col === 'b') {
+				$scope.ranks = [1, 2, 3, 4, 5, 6, 7, 8];
+			}
 			chess = new Chess();
 			player = col;
 			initBoard();
@@ -143,6 +146,10 @@ app.controller('ChessController', ['$scope', function($scope) {
 		});
 		socket.on("msg", function(msg) {
 			addMessage(msg);
+			$scope.$apply();
+		});
+		socket.on("opponent", function(name) {
+			$scope.opponent = name;
 			$scope.$apply();
 		});
 		socket.on('status', function (status) {
@@ -210,5 +217,9 @@ app.controller('ChessController', ['$scope', function($scope) {
 
 	$scope.fetchRooms = function() {
 		socket.emit('listRooms');
+	}
+
+	$scope.isGameStarted = function() {
+		return (!!chess && !chess.game_over());
 	}
 }]);

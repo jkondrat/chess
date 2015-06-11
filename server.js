@@ -90,6 +90,8 @@ io.sockets.on("connection", function (socket) {
 			existingRoom.game = new Chess();
 			existingRoom.black.socket.emit("start", "b");
 			existingRoom.white.socket.emit("start", "w");
+			existingRoom.black.socket.emit("opponent", existingRoom.white.name);
+			existingRoom.white.socket.emit("opponent", existingRoom.black.name);
 		} else {
 			var room = {}
 			room.name = roomName;
