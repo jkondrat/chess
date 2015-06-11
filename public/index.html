@@ -20,8 +20,10 @@
   <div class="container">
 
     <div class="page-header">
-      <h1>Chessboard <small>online </small></h1><span ng-show="isGameStarted()">Welcome {{user}}. You are playing versus {{opponent}}.</span>
-    </div>
+      <h1>Chessboard <small>online </small></h1><span ng-show="isGameStarted()">
+        <span ng-show="!black">Welcome {{user}}. You are playing versus {{opponent}}.</span>
+        <span ng-hide="!black">{{black}} versus {{opponent}}.</span>
+    </span> </div>
     <div class="alert alert-info" role="alert" ng-if="alert">{{alert}}</div>
 
     <div id="chessboard" class="col-md" ng-class="chessboardClass()">

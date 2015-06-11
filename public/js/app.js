@@ -121,23 +121,36 @@ app.controller('ChessController', ['$scope', function($scope) {
 			$scope.rooms = rooms;
 			$scope.$apply();
 		});
-		socket.on('start', function (col) {
+		socket.on('start', function (col, fen) {
 			$scope.messages = [];
 			$scope.alert = '';
 			if (col === 'b') {
 				$scope.ranks = [1, 2, 3, 4, 5, 6, 7, 8];
 			}
-			chess = new Chess();
+			if (col === 's') {
+				// spectator
+				chess = new Chess(fen);
+			} else {
+				chess = new Chess();
+			}
 			player = col;
 			initBoard();
 			rooms.hide();
 			chessboard.show();
 			chat.show();
-			var color = (col === 'w' ? 'white' : 'black');
-			$scope.messages.push({
-				"type": "status",
-				"text": "Game has started. You are playing as " + color + "."
-			});
+			if (col === 's') {
+				// spectator
+				$scope.messages.push({
+					"type": "status",
+					"text": "You are spectating the game."
+				});
+			} else {
+				var color = (col === 'w' ? 'white' : 'black');
+				$scope.messages.push({
+					"type": "status",
+					"text": "Game has started. You are playing as " + color + "."
+				});
+			}
 			$scope.$apply();
 		});
 		socket.on("turn", function(sqFrom, sqTo) {
@@ -148,7 +161,8 @@ app.controller('ChessController', ['$scope', function($scope) {
 			addMessage(msg);
 			$scope.$apply();
 		});
-		socket.on("opponent", function(name) {
+		socket.on("opponent", function(name, black) {
+			$scope.black = black;
 			$scope.opponent = name;
 			$scope.$apply();
 		});
@@ -172,13 +186,13 @@ app.controller('ChessController', ['$scope', function($scope) {
 		var roomName = $scope.room;
 		if (!!room) {
 			if (room.status === 'busy') {
-				return;
+				$scope.user = 'spectator';
 			}
 			roomName = room.name;
 		}
 		if (!roomName) {
 			$scope.alert = 'Room name not specified';
-		} else if (!$scope.user) {
+		} else if (!$scope.user && room.status !== 'busy') {
 			$scope.alert = 'Nickname not specified';
 		} else {
 			socket.emit('join', $scope.user, roomName);
@@ -210,6 +224,7 @@ app.controller('ChessController', ['$scope', function($scope) {
 	$scope.goBack = function() {
 		$scope.rooms = [];
 		$scope.messages = [];
+		$scope.black = '';
 		socket.emit('listRooms');
 		chat.hide();
 		rooms.show();

@@ -79,7 +79,9 @@ io.sockets.on("connection", function (socket) {
 				socket.emit("status", "duplicate username");
 				return;
 			} else if (existingRoom.white != null) {
-				socket.emit("status", "busy");
+				socket.join(roomName);
+				socket.emit("start", "s", existingRoom.game.fen());
+				socket.emit("opponent", existingRoom.white.name, existingRoom.black.name);
 				return;
 			}
 		}
