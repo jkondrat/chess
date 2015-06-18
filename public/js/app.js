@@ -99,7 +99,7 @@ app.controller('ChessController', ['$scope', function($scope) {
 	function addMessage(msg) {
 		$scope.messages.push(msg);
 		if ($scope.messages.length > 10) {
-			$scope.messages.splice(10, 1);
+			$scope.messages.splice(0, 1);
 		}
 	}
 
